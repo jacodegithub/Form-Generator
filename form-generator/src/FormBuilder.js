@@ -16,10 +16,24 @@ const data = [
 ]
 
 
+
 export const FormBuilder = () => {
+
     const fb = createRef()
+
     let [formBuilder, setFormBuilder] = useState(null)
-    const [form, setForm] = 
+
+    const [form, setForm] = useState([])
+
+
+    function saveData() {
+        setForm(formBuilder.formData)
+    }
+    
+    function clearData() {
+        formBuilder.actions.clearFields()
+        setForm([])
+    }
 
     useEffect(() => {
         setFormBuilder($(fb.current).formBuilder({ data }))
@@ -28,10 +42,9 @@ export const FormBuilder = () => {
   return (
     <div className='form-builder'>
         <h2>Form Builder</h2>
-        <div className="form-header">
-            {
-                Object.keys(form)
-            }
+        <div className="buttons">
+            <button type='button' onClick={clearData}>clear</button>
+            <button type='button' onClick={saveData}>save</button>
         </div>
     </div>
   )
