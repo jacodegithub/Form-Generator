@@ -15,8 +15,6 @@ const data = [
     },
 ]
 
-
-
 export const FormBuilder = () => {
 
     const fb = createRef()
