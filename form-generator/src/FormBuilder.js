@@ -1,49 +1,38 @@
-import $ from 'jquery'
-import React, { createRef, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import $ from 'jquery';
+import 'jquery-ui-sortable';
+import { FormContext } from './context';
 
-window.jQuery = $
-window.$ = $
+window.jQuery = $;
+window.$ = $;
+require('formBuilder'); 
 
-require("jQuery-ui-sortable")
-require("formBuilder")
+const FormBuilder = () => {
+  const fb = useRef();
 
-const data = [
-    {
-        type: "header",
-        subtype: "h2",
-        label: "Form Generator"
-    },
-]
+  const { resetForm, saveForm } = useContext(FormContext)
 
-export const FormBuilder = () => {
+  const [start, setStart] = useState(false)
 
-    const fb = createRef()
-
-    let [formBuilder, setFormBuilder] = useState(null)
-
-    const [form, setForm] = useState([])
-
-
-    function saveData() {
-        setForm(formBuilder.formData)
+  useEffect(() => {
+    if(!start) {
+        $(fb.current).formBuilder();
+        setStart(true)
+        console.log('print')
     }
-    
-    function clearData() {
-        formBuilder.actions.clearFields()
-        setForm([])
-    }
-
-    useEffect(() => {
-        setFormBuilder($(fb.current).formBuilder({ data }))
-    }, [])
+  }, [start]);
 
   return (
-    <div className='form-builder'>
-        <h2>Form Builder</h2>
-        <div className="buttons">
-            <button type='button' onClick={clearData}>clear</button>
-            <button type='button' onClick={saveData}>save</button>
+        <div className='form-builder'>
+            <h2>Build Form</h2>
+            <div ref={fb} />
+            <div className="form-buttons">
+                <button onClick={resetForm} type='button'>clear</button>
+                <button onClick={saveForm} type='button'>save</button>
+            </div>
         </div>
-    </div>
-  )
-}
+    )
+};
+
+export default FormBuilder;
+
