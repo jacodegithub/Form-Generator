@@ -1,24 +1,44 @@
-//   import $ from 'jquery'
-// import { useEffect, useRef, useState } from 'react'
+import $ from "jquery"; 
+import React, { createRef, useContext, useEffect, useState } from "react"; 
+import { FormContext } from "./context";
 
-//   window.jQuery = $
-//   window.$ = $
+window.jQuery = $; 
+window.$ = $; 
 
-//   require('jquery-ui-sortable')
-//   require('formBuilder/dist/form-render.min.js')
+require("jquery-ui-sortable"); 
+require("formBuilder/dist/form-render.min.js")
 
-//   export const FormField = () => {
-    
-//     const [display, setDisplay] = useState([])
+const FormRender = () => {
+    const { form, setForm } = useContext(FormContext);
+    const [ display, setDisplay] = useState({});
+    const fb = createRef();
+    let formRender;
 
-//     const fb = useRef()
 
-//     const [form, setForm] = useState([])
+    useEffect(() => {
+        let formData = form;
+        formRender = $(fb.current).formRender( {formData} );
+    }, [form]);
 
-//     let displayField;
+    function saveData() {
+        setDisplay($(fb.current).formRender("userData"))
+    }
+    return (
+        <div className="display-form">
+            <h1>Display Form</h1>
+            <form ref={fb}></form>
+            
+            <>
+              <button
+              onClick={saveData}
+              type="button"
+              >
+                Submit Data
+              </button>           
+            </>
 
-//     useEffect(() => {
+        </div>
+    )
+}
 
-//     }, [])
-
-//   }
+export default FormRender
