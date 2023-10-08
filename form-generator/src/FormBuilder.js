@@ -3,16 +3,16 @@ import $ from 'jquery';
 import 'jquery-ui-sortable';
 import { FormContext } from './context';
 
-
 window.jQuery = $;
 window.$ = $;
-require('formBuilder')
+require('formBuilder');
 
 const FormBuilder = () => {
   const fb = useRef();
   const [builderInstance, setBuilderInstance] = useState(null);
   const [start, setStart] = useState(false);
   const {form, setForm} = useContext(FormContext);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (!start) {
@@ -31,12 +31,37 @@ const FormBuilder = () => {
   }, [start]);
 
   function resetForm() {
-      builderInstance.actions.clearFields();
-      setForm([]);
+    builderInstance.actions.clearFields();
+    setForm([]);
+    setErrors({});
   }
 
   function saveForm() {
-    setForm(builderInstance.formData)
+    const data = builderInstance.actions.getData();
+    const validationErrors = validateForm();
+
+    if (Object.keys(validationErrors).length === 0) {
+      setForm(data);
+      setErrors({});
+    } else {
+      setErrors(validationErrors);
+    }
+  }
+
+  function validateForm(data) {
+    const errors = {};
+
+    if (!data) {
+        return errors;
+      }
+
+    data.forEach((field) => {
+      if (field.required && !field.value) {
+        errors[field.name] = 'This field is required.';
+      }
+    });
+
+    return errors;
   }
 
   return (
@@ -51,6 +76,13 @@ const FormBuilder = () => {
           Save
         </button>
       </div>
+      {Object.keys(errors).length > 0 && (
+        <div className="error-messages">
+          {Object.keys(errors).map((fieldName) => (
+            <div key={fieldName}>{errors[fieldName]}</div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
