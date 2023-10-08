@@ -1,5 +1,6 @@
 {
   "name": "form-generator",
+  "homepage": "https://jacodegithub.github.io/Form-Generator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
