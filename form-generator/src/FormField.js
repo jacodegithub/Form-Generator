@@ -35,9 +35,6 @@ const FormRender = () => {
                 Submit Data
               </button>           
             </>
-            {Object.keys(display).length > 0 &&
-                <p>{JSON.parse(JSON.stringify(display))}</p>
-              }
         </div>
     )
 }
